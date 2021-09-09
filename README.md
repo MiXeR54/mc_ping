@@ -24,6 +24,6 @@ ping('localhost', 25565, (error, result) => {
 
 ## TODO
 
-[x] format description in universal format
-[] format other fields
-[] create npm lib
+- [x] format description in universal format
+- [ ] format other fields
+- [ ] create npm lib
