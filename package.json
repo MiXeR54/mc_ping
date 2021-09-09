@@ -1,0 +1,16 @@
+{
+  "name": "liba",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "MiXeR54",
+  "license": "ISC",
+  "dependencies": {
+    "node-int64": "^0.4.0",
+    "varint": "^6.0.0"
+  }
+}
