@@ -30,7 +30,8 @@ const formatCodes = {
 
 // Парсим все виды форматов MOTD в один формат
 function parseDescription(description) {
-  if (typeof description === "string") return new Description(description);
+  if (typeof description === "string")
+    return new Description(description).toRaw();
 
   let result = "";
 
