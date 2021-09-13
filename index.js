@@ -8,8 +8,8 @@ const {
 const parseDescription = require("./descriptionParser.js");
 
 const ping = (module.exports.ping = (hostname, port = 25565, callback) => {
-  resolveSRV(hostname)
-    .then(openConnection, () => openConnection({ hostname, port }))
+  resolveSRV(hostname, port)
+    .then(openConnection)
     .then((data) => callback(null, data))
     .catch(callback);
 });
@@ -23,7 +23,7 @@ module.exports.pingWithPromise = (hostname, port) => {
 };
 
 function openConnection(address) {
-  const { hostname, port } = address;
+  const { hostname, port, ip } = address;
 
   return new Promise((resolve, reject) => {
     let connection = net.createConnection(port, hostname, () => {
@@ -50,6 +50,7 @@ function openConnection(address) {
           data.ping = ping;
           data.description = parseDescription(data.description);
           data.address = `${hostname}:${port}`;
+          data.ip_identifier = ip;
           resolve(data);
         });
       });
@@ -74,24 +75,36 @@ function openConnection(address) {
   });
 }
 
-function resolveSRV(hostname) {
-  return new Promise((resolve, reject) => {
-    if (net.isIP(hostname) !== 0) {
-      reject(new Error("Hostname is an IP address"));
-    } else {
-      dns.resolveSrv("_minecraft._tcp." + hostname, (error, result) => {
-        if (error) {
-          reject(error);
-        } else if (result.length === 0) {
-          reject(new Error("Empty result"));
-        } else {
-          console.log(result[0].name);
-          resolve({
-            hostname: result[0].name,
-            port: result[0].port,
-          });
-        }
+// function resolveSRV(hostname) {
+//   return new Promise((resolve, reject) => {
+//     if (net.isIP(hostname) !== 0) {
+//       reject(new Error("Hostname is an IP address"));
+//     } else {
+//       dns.resolveSrv("_minecraft._tcp." + hostname, (error, result) => {
+//         if (error) {
+//           reject(error);
+//         } else if (result.length === 0) {
+//           reject(new Error("Empty result"));
+//         } else {
+//           console.log(result[0].name);
+//           resolve({
+//             hostname: result[0].name,
+//             port: result[0].port,
+//           });
+//         }
+//       });
+//     }
+//   });
+// }
+
+const resolveSRV = (host, port) =>
+  new Promise((resolve, reject) => {
+    dns.lookup(host, (err, address) => {
+      if (err) reject(err);
+      resolve({
+        hostname: host,
+        port: port,
+        ip: address,
       });
-    }
+    });
   });
-}

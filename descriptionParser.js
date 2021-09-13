@@ -63,7 +63,7 @@ function parseDescription(description) {
     }
   }
 
-  return new Description(result);
+  return new Description(result).toRaw();
 }
 
 module.exports = parseDescription;
