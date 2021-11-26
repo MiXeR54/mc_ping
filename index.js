@@ -51,6 +51,7 @@ function openConnection(address) {
           data.description = parseDescription(data.description);
           data.address = `${hostname}:${port}`;
           data.ip_identifier = ip;
+          data.port = port;
           resolve(data);
         });
       });
