@@ -20,7 +20,12 @@ ping('localhost', 25565, (error, result) => {
     }
 })
 ```
-
+## Установка
+В npmrc записать
+```
+@mixer54:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=TOKEN
+```
 
 ## TODO
 
