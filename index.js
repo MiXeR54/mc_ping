@@ -50,7 +50,7 @@ function openConnection(address) {
           data.ping = ping;
           data.description = parseDescription(data.description);
           data.address = `${hostname}:${port}`;
-          data.ip_identifier = ip;
+          data.ip = ip;
           data.port = port;
           resolve(data);
         });
@@ -71,8 +71,8 @@ function openConnection(address) {
 
     let timeout = setTimeout(() => {
       connection.end();
-      reject(new Error("Timed out (10 seconds passed)"));
-    }, 10000);
+      reject(new Error("Timed out (3 seconds passed)"));
+    }, 3000);
   });
 }
 
