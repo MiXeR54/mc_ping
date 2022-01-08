@@ -23,7 +23,7 @@ module.exports.pingWithPromise = (hostname, port) => {
 };
 
 function openConnection(address) {
-  const { hostname, port, ip } = address;
+  const { hostname, port, ip, displayHost } = address;
 
   return new Promise((resolve, reject) => {
     let connection = net.createConnection(port, hostname, () => {
@@ -49,7 +49,8 @@ function openConnection(address) {
           clearTimeout(timeout);
           data.ping = ping;
           data.description = parseDescription(data.description);
-          data.address = `${hostname}:${port}`;
+          data.displayHost = displayHost;
+          data.resolvedAddress = `${hostname}:${port}`;
           data.ip = ip;
           data.port = port;
           resolve(data);
@@ -76,36 +77,27 @@ function openConnection(address) {
   });
 }
 
-// function resolveSRV(hostname) {
-//   return new Promise((resolve, reject) => {
-//     if (net.isIP(hostname) !== 0) {
-//       reject(new Error("Hostname is an IP address"));
-//     } else {
-//       dns.resolveSrv("_minecraft._tcp." + hostname, (error, result) => {
-//         if (error) {
-//           reject(error);
-//         } else if (result.length === 0) {
-//           reject(new Error("Empty result"));
-//         } else {
-//           console.log(result[0].name);
-//           resolve({
-//             hostname: result[0].name,
-//             port: result[0].port,
-//           });
-//         }
-//       });
-//     }
-//   });
-// }
+const resolveSRV = (host, port, protocol = "tcp") => {
+  return new Promise((resolve) => {
+    dns.resolveSrv(`_minecraft._${protocol}.${host}`, (error, addresses) => {
+      let address = {};
 
-const resolveSRV = (host, port) =>
-  new Promise((resolve, reject) => {
-    dns.lookup(host, (err, address) => {
-      if (err) reject(err);
-      resolve({
-        hostname: host,
-        port: port,
-        ip: address,
+      if (!error) {
+        address.name = addresses[0].name;
+        address.port = addresses[0].port;
+      } else {
+        address.name = host;
+      }
+
+      dns.lookup(address.name, (err, res) => {
+        if (err) reject(err);
+        resolve({
+          displayHost: host,
+          hostname: address.name,
+          port: address.port || port,
+          ip: res,
+        });
       });
     });
   });
+};
