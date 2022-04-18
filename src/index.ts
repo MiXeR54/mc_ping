@@ -1,5 +1,5 @@
-const net = require("net");
-const dns = require("dns");
+import net from "net";
+import dns from "dns";
 const {
   PacketDecoder,
   createHandshakePacket,
@@ -7,7 +7,12 @@ const {
 } = require("./packet");
 const parseDescription = require("./descriptionParser.js");
 
-const ping = (module.exports.ping = (hostname, port = 25565, callback) => {
+interface ServerI {
+  hostname: string,
+  port: number
+}
+
+const ping = (hostname, port = 25565, callback) => {
   resolveSRV(hostname, port)
     .then(openConnection)
     .then((data) => callback(null, data))
@@ -16,6 +21,7 @@ const ping = (module.exports.ping = (hostname, port = 25565, callback) => {
 
 module.exports.pingWithPromise = (hostname, port) => {
   return new Promise((resolve, reject) => {
+    resolveSRV(hostname, port).then(openConnection)
     ping(hostname, port, (error, result) =>
       error ? reject(error) : resolve(result)
     );

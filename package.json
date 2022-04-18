@@ -1,19 +1,28 @@
 {
-  "name": "@mixer54/mc_ping",
+  "name": "stramonium",
   "version": "1.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/@MiXeR54"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MiXeR54/mc_ping.git"
   },
+  "bugs": {
+    "url": "https://github.com/MiXeR54/mc_ping/issues"
+  },
+  "homepage": "https://github.com/MiXeR54/mc_ping#readme",
   "keywords": [],
   "author": "MiXeR54",
   "license": "ISC",
   "dependencies": {
     "node-int64": "^0.4.0",
     "varint": "^6.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.24",
+    "typescript": "^4.6.3"
   }
 }
